@@ -15,7 +15,7 @@ A deeper dive into the backend implementation of Retrieval-Augmented Generation.
 - **Focus**: Configuring high-performance vector indexes (GIN/HNSW) and secure knowledge base integration.
 
 ## Technologies Used
-- **Generative AI**: Amazon Bedrock, Titan Embeddings, Foundational Models (FM).
+- **Generative AI**: Amazon Bedrock, Amazon SageMaker, Titan Embeddings, Foundational Models (FM).
 - **Database**: Amazon Aurora PostgreSQL (`pgvector` extension).
 - **Compute**: AWS Lambda (Serverless Python).
 - **Infrastructure**: AWS IAM, Secrets Manager, S3.
