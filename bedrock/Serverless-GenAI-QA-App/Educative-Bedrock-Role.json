@@ -1,0 +1,107 @@
+{
+    "Policies": [
+        {
+            "PolicyName": "BedrockInvokeModelPolicy",
+            "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "BedrockInvokeModelStatement",
+                        "Effect": "Allow",
+                        "Action": [
+                            "bedrock:InvokeModel"
+                        ],
+                        "Resource": [
+                            "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v2:0",
+                            "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-premier-v1:0"
+                        ]
+                    },
+                    {
+                        "Sid": "BedrockAgentPermissions",
+                        "Effect": "Allow",
+                        "Action": [
+                            "bedrock:Retrieve",
+                            "bedrock:ApplyGuardrail"
+                        ],
+                        "Resource": "*"
+                    }
+                ]
+            }
+        },
+        {
+            "PolicyName": "RdsPolicy",
+            "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "RdsDescribeStatementID",
+                        "Effect": "Allow",
+                        "Action": [
+                            "rds:DescribeDBClusters"
+                        ],
+                        "Resource": [
+                            "arn:aws:rds:us-east-1:*:cluster:educative-aurora-cluster"
+                        ]
+                    },
+                    {
+                        "Sid": "DataAPIStatementID",
+                        "Effect": "Allow",
+                        "Action": [
+                            "rds-data:BatchExecuteStatement",
+                            "rds-data:ExecuteStatement"
+                        ],
+                        "Resource": [
+                            "arn:aws:rds:us-east-1:*:cluster:educative-aurora-cluster"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "PolicyName": "S3Policy",
+            "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "S3ListBucketStatement",
+                        "Effect": "Allow",
+                        "Action": [
+                            "s3:ListBucket"
+                        ],
+                        "Resource": [
+                            "arn:aws:s3:::data-bucket-*"
+                        ]
+                    },
+                    {
+                        "Sid": "S3GetObjectStatement",
+                        "Effect": "Allow",
+                        "Action": [
+                            "s3:GetObject"
+                        ],
+                        "Resource": [
+                            "arn:aws:s3:::data-bucket-*/*"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "PolicyName": "SecretsManagerPolicy",
+            "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "SecretsManagerGetStatement",
+                        "Effect": "Allow",
+                        "Action": [
+                            "secretsmanager:GetSecretValue"
+                        ],
+                        "Resource": [
+                            "arn:aws:secretsmanager:us-east-1:*:secret:bedrock_user_secret-*"
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}

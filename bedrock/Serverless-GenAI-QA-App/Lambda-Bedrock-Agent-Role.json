@@ -1,0 +1,22 @@
+{
+    "Policies": [
+        {
+            "PolicyName": "BedrockAgentPolicy",
+            "PolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Sid": "AllowInvokeBedrockAgent",
+                        "Effect": "Allow",
+                        "Action": [
+                            "bedrock:InvokeAgent"
+                        ],
+                        "Resource": [
+                            "*"
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
