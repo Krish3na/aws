@@ -6,11 +6,44 @@ This project demonstrates how to build a Serverless Generative AI Question-Answe
 
 [![Architecture](Architecture.png)](https://youtu.be/Z5Pbr6rkqng)
 
-You can watch the [demo and explanation video here](https://youtu.be/Z5Pbr6rkqng).
+You can watch the [demo video here](https://youtu.be/Z5Pbr6rkqng).
 
 ## Task Overview
 
 The goal of this project is to create a Retrieval-Augmented Generation (RAG) application that allows users to query a knowledge base. The application uses Amazon Bedrock for the foundation models and Amazon Aurora PostgreSQL has the vector store.
+
+## Technical Deep Dive
+
+### Database Schema (Amazon Aurora PostgreSQL)
+
+The vector store is implemented using the `pgvector` extension on Amazon Aurora PostgreSQL.
+
+-   **Schema**: `bedrock_integration`
+-   **Table**: `bedrock_kb`
+    -   `id` (UUID): Unique identifier.
+    -   `embedding` (VECTOR(256)): Stores the vector embeddings of the text chunks.
+    -   `chunks` (TEXT): The raw text content.
+    -   `metadata` (JSON): associated metadata.
+
+#### Indexing Techniques used:
+1.  **GIN (Generalized Inverted Index)**: Used on the `chunks` column (`to_tsvector`) to enable efficient keyword-based full-text searches.
+2.  **HNSW (Hierarchical Navigable Small World)**: Used on the `embedding` column (`vector_cosine_ops`) for efficient approximate nearest neighbor search in high-dimensional space. This allows for fast semantic retrieval.
+
+### Amazon Bedrock Components
+
+-   **Knowledge Base**: Connects the data source (S3) with the vector store (Aurora).
+-   **Models**:
+    -   **Titan Text Embeddings V2**: Used to generate embeddings for the documents.
+    -   **Nova Micro** / **Amazon Titan Text Premier**: Used as the foundation model for text generation and reasoning.
+-   **Agents**: Bedrock Agents are used to orchestrate the interaction between the user input, the knowledge base, and the foundation model.
+
+### Frontend (React & Amplify)
+
+The frontend is a React application that provides a chat interface for users to interact with the agent.
+-   **AWS Amplify**: Used to host and deploy the web application. It handles the CI/CD pipeline and hosting configuration.
+-   **Integration**: The frontend communicates with the backend (via API Gateway/Lambda) to send user queries and display the streaming responses.
+
+![Frontend Test](Frontend_Test.png)
 
 ## Implementation Details
 
