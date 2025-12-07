@@ -4,9 +4,9 @@ This project implements a Retrieval-Augmented Generation (RAG) system using AWS 
 
 ## Architecture
 
-[![Architecture](Architecture.png)](https://youtu.be/Z5Pbr6rkqng)
+[![Architecture](Architecture.png)](https://youtu.be/ZSLhkQjB87Y)
 
-You can watch the [demo video here](https://youtu.be/Z5Pbr6rkqng).
+You can watch the [demo video here](https://youtu.be/ZSLhkQjB87Y).
 
 ## Project Overview
 

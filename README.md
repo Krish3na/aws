@@ -1,5 +1,7 @@
 # AWS Generative AI Portfolio
 
+![AWS GenAI](aws_genai.jpeg)
+
 This repository contains clear, production-oriented implementations of Generative AI serverless architectures on AWS. It demonstrates the practical application of Large Language Models (LLMs), Vector Databases, and Agentic workflows to solve real-world problems.
 
 ## Key Projects

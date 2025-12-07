@@ -8,7 +8,7 @@ This project demonstrates how to build a Serverless Generative AI Question-Answe
 
 You can watch the [demo video here](https://youtu.be/Z5Pbr6rkqng).
 
-## Task Overview
+## Project Overview
 
 The goal of this project is to create a Retrieval-Augmented Generation (RAG) application that allows users to query a knowledge base. The application uses Amazon Bedrock for the foundation models and Amazon Aurora PostgreSQL has the vector store.
 
