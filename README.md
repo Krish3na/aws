@@ -16,6 +16,11 @@ A deeper dive into the backend implementation of Retrieval-Augmented Generation.
 - **Tech Stack**: Amazon Bedrock (Titan models), SQL-based Vector Store.
 - **Focus**: Configuring high-performance vector indexes (GIN/HNSW) and secure knowledge base integration.
 
+### 3. [Conversational RAG Agent](./bedrock/conversational-rag-agent)
+An advanced agentic workflow capable of multi-turn conversations.
+- **Tech Stack**: Amazon Bedrock Agents, Aurora PostgreSQL (1024-dim Layout).
+- **Key Features**: Context retention, orchestrated retrieval, and higher-dimensional embedding support.
+
 ## Technologies Used
 - **Generative AI**: Amazon Bedrock, Amazon SageMaker, Titan Embeddings, Foundational Models (FM).
 - **Database**: Amazon Aurora PostgreSQL (`pgvector` extension).
