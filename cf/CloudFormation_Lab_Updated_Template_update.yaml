@@ -1,0 +1,131 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  EC2InstanceType:
+    Type: String
+    Default: t2.micro
+  EC2AMI:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64'
+
+Resources:
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub 'Internal Security group for ${AWS::StackName}'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: aws-cfn-instance-role
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: InstanceRole
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref EC2AMI
+      InstanceType: !Ref EC2InstanceType
+      IamInstanceProfile: !Ref InstanceProfile
+      SecurityGroupIds:
+        - !GetAtt SecurityGroup.GroupId
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          exec > /tmp/userdata.log 2>&1
+
+          # Update system packages
+          dnf update -y
+
+          # Install and start HTTPD
+          dnf install -y httpd
+          systemctl start httpd
+          systemctl enable httpd
+
+          # Create default HTML page
+          echo "Hello World from Educative($(hostname))" > /var/www/html/index.html
+      Tags:
+        - Key: Name
+          Value: !Ref AWS::StackName
+
+  SecondSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enabling SSH access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+
+  SecondInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref EC2AMI
+      InstanceType: !Ref EC2InstanceType
+      SecurityGroupIds:
+        - !GetAtt SecondSecurityGroup.GroupId
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          exec > /tmp/userdata.log 2>&1
+
+          # Update system
+          dnf update -y
+
+          # Amazon Linux 2023 no longer supports aws-cfn-bootstrap
+          # Alternative tools like SSM Agent or cfn-init from EC2 Launch may be considered in future
+
+          # Install and run HTTPD
+          dnf install -y httpd
+          systemctl start httpd
+          systemctl enable httpd
+
+          # Create HTML content
+          echo "Hello World from Second Instance" > /var/www/html/index.html
+
+Outputs:
+  InstanceEndpoint:
+    Description: The public DNS server for the created instance
+    Value: !Sub "http://${Instance.PublicDnsName}:80"
+    Export:
+      Name: InstanceEndpoint
+
+  SecondInstanceEndpoint:
+    Description: The public DNS server for the created instance
+    Value: !Sub "http://${SecondInstance.PublicDnsName}:80"
+    Export:
+      Name: SecondInstanceEndpoint

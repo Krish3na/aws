@@ -21,6 +21,11 @@ An advanced agentic workflow capable of multi-turn conversations.
 - **Tech Stack**: Amazon Bedrock Agents, Aurora PostgreSQL (1024-dim Layout).
 - **Key Features**: Context retention, orchestrated retrieval, and higher-dimensional embedding support.
 
+### 4. [GenAI App with Terraform](./bedrock/GenAI-App-Terraform)
+A serverless architecture for document ingestion and QA, provisioned entirely with Terraform.
+- **Tech Stack**: Terraform, Amazon Bedrock (Knowledge Bases, Guardrails), AWS Lambda, Amazon API Gateway.
+- **Key Features**: Infrastructure as Code, automated ingestion pipeline, and responsible AI guardrails.
+
 ## Technologies Used
 - **Generative AI**: Amazon Bedrock, Amazon SageMaker, Titan Embeddings, Foundational Models (FM).
 - **Database**: Amazon Aurora PostgreSQL (`pgvector` extension).

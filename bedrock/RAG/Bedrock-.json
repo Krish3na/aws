@@ -1,0 +1,81 @@
+{
+  "Policies": [
+    {
+      "PolicyName": "InvokeModelPolicy",
+      "PolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "InvokeModelStatement",
+            "Effect": "Allow",
+            "Action": ["bedrock:InvokeModel"],
+            "Resource": [
+              "arn:aws:bedrock:us-east-1::foundation-model/*"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "PolicyName": "RDSAccessPolicy",
+      "PolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "DescribeDBClusters",
+            "Effect": "Allow",
+            "Action": ["rds:DescribeDBClusters"],
+            "Resource": [
+              "arn:aws:rds:us-east-1:*:cluster:*"
+            ]
+          },
+          {
+            "Sid": "RDSDataAPIAccess",
+            "Effect": "Allow",
+            "Action": [
+              "rds-data:BatchExecuteStatement",
+              "rds-data:ExecuteStatement"
+            ],
+            "Resource": [
+              "arn:aws:rds:us-east-1:*:cluster:*"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "PolicyName": "S3AccessPolicy",
+      "PolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "ListS3Buckets",
+            "Effect": "Allow",
+            "Action": ["s3:ListBucket"],
+            "Resource": ["arn:aws:s3:::*"]
+          },
+          {
+            "Sid": "GetS3Objects",
+            "Effect": "Allow",
+            "Action": ["s3:GetObject"],
+            "Resource": ["arn:aws:s3:::*/*"]
+          }
+        ]
+      }
+    },
+    {
+      "PolicyName": "SecretsManagerAccessPolicy",
+      "PolicyDocument": {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Sid": "AccessSecrets",
+            "Effect": "Allow",
+            "Action": ["secretsmanager:GetSecretValue"],
+            "Resource": ["arn:aws:secretsmanager:us-east-1:*:secret:*"]
+          }
+        ]
+      }
+    }
+  ]
+}
