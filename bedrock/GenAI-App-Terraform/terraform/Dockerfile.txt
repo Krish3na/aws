@@ -1,0 +1,59 @@
+# Use a modern Ubuntu base image with Python support
+FROM ubuntu:24.04
+
+# Set arguments for tool versions to make them easy to update
+ARG AWS_CLI_VERSION=2.13.25
+
+# Set DEBIAN_FRONTEND to noninteractive to avoid installation prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install necessary dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    jq \
+    gnupg \
+    software-properties-common \
+    lsb-release \
+    git \
+    ca-certificates \
+    unzip \
+    python3 \
+    python3-pip \
+    bash \
+    postgresql-client \
+    sudo && \
+    rm -rf /var/lib/apt/lists/*
+
+# Add the official HashiCorp GPG key and repository
+RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.list.d/hashicorp.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends terraform && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install AWS CLI v2 manually
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
+    unzip awscliv2.zip && \
+    ./aws/install --update && \
+    rm -rf awscliv2.zip aws
+
+# Create a working directory for the Terraform files
+WORKDIR /terraform
+
+# Copy local files (optional, remove if not needed)
+COPY . .
+
+# Create the VS Code settings file for the lab environment
+RUN echo '{ \
+    "task.allowAutomaticTasks": "on", \
+    "workbench.startupEditor": "none", \
+    "window.autoDetectColorScheme": true, \
+    "terminal.integrated.cwd": "", \
+    "files.exclude": { \
+        "persistent": true \
+    } \
+}' > /settings.json
+
+# Set the default command to start a bash shell
+CMD [ "bash" ]
