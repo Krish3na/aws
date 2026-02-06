@@ -4,7 +4,7 @@ This project deploys a complete, serverless Generative AI solution on AWS using 
 
 ## Architecture
 
-![Architecture](architecture.png)
+![Architecture](Architecture.png)
 
 ## Overview
 
@@ -62,7 +62,7 @@ The entire infrastructure is defined in the `terraform` directory.
 
 ## Demo
 
-[Link to Demo Video (Placeholder)](https://example.com)
+[Link to Demo Video](https://example.com)
 
 ## Files Included
 
